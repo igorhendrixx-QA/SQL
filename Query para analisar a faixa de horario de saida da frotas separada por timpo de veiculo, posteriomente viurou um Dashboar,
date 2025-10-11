@@ -1,0 +1,112 @@
+SELECT
+    dtq_sertms,(
+        CASE
+            WHEN dtq_sertms = '1'  THEN
+                'COLETA'
+            WHEN dtq_sertms = '3'  THEN
+                'ENTREGA'
+            ELSE
+                'TRANSFERENCIA'
+        END
+    ) AS tipo_viagem,
+    (
+        CASE
+            WHEN dtq_horfec >= '0000'
+                 AND dtq_horfec < '0900' THEN
+                'ATE 9HRS'
+            WHEN dtq_horfec > '0900'
+                 AND dtq_horfec < '1200' THEN
+                '9HRS ATÉ 12HRS'
+            ELSE
+                'APÓS 12HRS'
+        END
+    ) AS faixa_horario,
+    COUNT(dtq_horfec) AS quantidade
+FROM
+    dtq010
+WHERE
+    dtq_datger BETWEEN '20220314' AND '20220523'
+    AND dtq_filori = '07'
+    AND dtq_sertms IN (
+        '1',
+        '3'
+    )
+    AND dtq_tiptra = '1'
+    AND dtq_horfec <> ' '
+    AND d_e_l_e_t_ = ' '
+GROUP BY
+    dtq_sertms,
+    (
+        CASE
+            WHEN dtq_horfec >= '0000'
+                 AND dtq_horfec < '0900' THEN
+                'ATE 9HRS'
+            WHEN dtq_horfec > '0900'
+                 AND dtq_horfec < '1200' THEN
+                '9HRS ATÉ 12HRS'
+            ELSE
+                'APÓS 12HRS'
+        END
+    )
+ORDER BY
+    tipo_viagem;
+                  
+           
+           
+           
+                  
+ select (
+        CASE
+            WHEN dtq_sertms = '1'  THEN
+                'COLETA'
+            WHEN dtq_sertms = '3'  THEN
+                'ENTREGA'
+            ELSE
+                'TRANSFERENCIA'
+        END
+    ) AS tipo_viagem,
+    (
+        CASE
+            WHEN dtq_horfec >= '0000'
+                 AND dtq_horfec < '0900' THEN
+                'ATE 9HRS'
+            WHEN dtq_horfec > '0900'
+                 AND dtq_horfec < '1200' THEN
+                '9HRS ATÉ 12HRS'
+            ELSE
+                'APÓS 12HRS'
+        END
+    ) AS faixa_horario,
+    COUNT(dtq_horfec) AS quantidade
+ FROM
+ dtq010
+ INNER JOIN DA3010
+ ON dtq010.dtq_veic=da3010.da3_cod
+ WHERE
+    dtq_datger BETWEEN '20220314' AND '20220523'
+    AND dtq_filori = '07'
+    AND dtq_sertms IN (
+        '1',
+        '3'
+    )
+    AND dtq_tiptra = '1'
+    AND dtq_horfec <> ' '
+    AND d_e_l_e_t_ = ' '
+GROUP BY
+    dtq_sertms,
+    (
+        CASE
+            WHEN dtq_horfec >= '0000'
+                 AND dtq_horfec < '0900' THEN
+                'ATE 9HRS'
+            WHEN dtq_horfec > '0900'
+                 AND dtq_horfec < '1200' THEN
+                '9HRS ATÉ 12HRS'
+            ELSE
+                'APÓS 12HRS'
+        END
+    )
+ORDER BY
+    tipo_viagem;
+     
+
