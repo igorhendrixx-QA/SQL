@@ -1,0 +1,20 @@
+CREATE OR REPLACE PROCEDURE p_apagar_chave (
+    p_chave IN CHAR
+) IS
+BEGIN
+    DELETE dtc010
+    WHERE
+            dtc_nfeid = ( p_chave )
+        AND dtc_filial = ' ';
+
+    DELETE pnf010
+    WHERE
+            pnf_keynfe = ( p_chave )
+        AND pnf_filial = ' ';
+DELETE PWP010
+    WHERE
+       PWP_DANFE = ( p_chave ));
+
+    COMMIT;
+END;
+  
