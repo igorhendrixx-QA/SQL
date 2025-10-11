@@ -1,0 +1,82 @@
+  
+     
+     
+                  
+                  
+ SELECT
+    dtq.dtq_filori            AS filial,
+    dtq.dtq_datfec            AS data,
+    dtq.dtq_viagem            AS viagem,
+    dtq.dtq_veic              AS veic,
+    SUM(dt6.dt6_valmer)       AS valor_mercadoria_viagem,
+    da3.da3_capval            AS capacidade_veic
+FROM
+         dtq010 dtq
+    INNER JOIN da3010  da3 ON dtq.dtq_veic = da3.da3_cod
+                             AND da3.da3_filial = ' '
+                             AND da3.d_e_l_e_t_ = ' '
+    INNER JOIN dud010  dud ON dtq.dtq_viagem = dud.dud_viagem
+                             AND dtq.dtq_filori = dud.dud_filori
+                             AND dud.d_e_l_e_t_ <> '*'
+                             AND dud.dud_sertms <> '2'
+                             AND dud.dud_filial = ' '
+    INNER JOIN dt6010  dt6 ON dud.dud_doc = dt6.dt6_doc
+                             AND dt6.dt6_fildoc = dud.dud_fildoc
+                             AND dt6.dt6_filial = ' '
+                             AND dt6.d_e_l_e_t_ = ' '
+WHERE
+    dtq.dtq_datfec BETWEEN '20220901' AND '20220920'
+    AND dtq.dtq_filial = ' '
+    AND dtq.d_e_l_e_t_ <> '*'
+    AND dtq.dtq_status = '3'
+    AND dtq.dtq_sertms <> '2'
+GROUP BY
+    dtq.dtq_datfec,
+    dtq.dtq_viagem,
+    dtq.dtq_filori,
+    dtq.dtq_datfec,
+    dtq.dtq_viagem,
+    dtq.dtq_veic,
+    da3.da3_capval
+ORDER BY
+    filial,
+    viagem;
+    
+    
+    
+    
+    
+    
+    
+    
+    SELECT 
+    app.fildoc,
+    app.doc,
+    app.serie AS tipo,
+    app.hora_oco,
+    app.usuario,
+    app.ocorrencia,
+    app.nome_recebedor,
+    app.doc_recebedor,
+    app.hora_checkin,
+    app.hora_checkout,
+    app.latlon_checkout,
+    app.latlon_assinatura,
+    app.latlon_cliente,
+    app.distancia,
+    app.horacad,
+    dud.dud_filori,
+    dud.dud_viagem,
+    dtq.dtq_veic
+FROM
+         app_motorista app
+    INNER JOIN dud010  dud ON app.doc = dud.dud_doc
+                             AND app.fildoc = dud.dud_fildoc
+    INNER JOIN dtq010  dtq ON dtq.dtq_viagem = dud.dud_viagem
+                             AND dtq.dtq_filori = dud.dud_filori
+WHERE
+        app.data_oco = '20220802'
+    AND dud.dud_datcad = '20220802'
+    AND dud.dud_filori = '06'
+    AND dud.dud_sertms <> '2'
+    AND dud.dud_filial = ' ';
